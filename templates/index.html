@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLI App Web Interface</title>
+    <style>
+        * {
+margin: 0;
+padding: 0;
+}
+
+body {
+width: 100vw;
+height: 100vh;
+font-family: sans-serif;
+display: flex;
+
+background-color: #0A2344;
+background :url("static/sanskrit.jpg");
+background-size: cover;
+align-items: center;
+justify-content: center;
+}
+
+
+
+.container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px; /* Adjust the margin as needed */
+
+        }
+
+        .glass-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px; /* Adjust the margin as needed */
+        }
+
+@font-face {
+    font-family: 'Namaste'; /* Choose a name for your font */
+    src: url( {{ url_for('static', filename='Ananda Namaste Regular.ttf') }}) ; /* Replace 'path/to/your/font.woff' with the actual path to your font file */
+}
+
+.container h1{
+    font-family: 'Namaste', sans-serif;
+    margin-bottom: 50px;
+    font-size: 50px;
+    text-shadow: #000;
+    
+}
+
+.glass {
+width: 500px;
+height: 400px;
+background-color: rgba(255, 255, 255, 0.1);
+padding: 50px;
+color: #000;
+border-radius: 9px;
+margin: 20px;
+backdrop-filter: blur(50px);
+border: 2px solid transparent;
+background-clip: padding-box;
+box-shadow: 10px 10px 10px rgba(45, 55, 68, 0.3);
+line-height: 1.5;
+transform: translatey(-5%);
+transition: transform 0.5s;
+overflow-y: auto; /* Add this line to make the content scrollable vertically */
+
+}
+.glass-1 {
+width: 500px;
+height: 400px;
+background-color: rgba(255, 255, 255, 0.1);
+padding: 50px;
+color: rgb(122, 82, 82);
+border-radius: 9px;
+backdrop-filter: blur(50px);
+border: 2px solid transparent;
+background-clip: padding-box;
+box-shadow: 10px 10px 10px rgba(45, 55, 68, 0.3);
+line-height: 1.5;
+transform: translatey(-5%);
+transition: transform 0.5s;
+font-size: 1.7rem;
+}
+.glass h1 {
+font-size: 1.5rem;
+text-align: center;
+}
+.glass h2 {
+font-size: 1.5rem;
+margin-top: 20px;
+}
+.input {
+width: 100%;
+height: 70px;
+overflow: hidden;
+margin-top: 40px;
+}
+.input input {
+width: 100%;
+height: 70px;
+border: none;
+padding-left: 30px;
+padding-top: 0;
+outline: none;
+font-size: 1.5rem;
+border-radius: 20px;
+}
+.glass p {
+font-size: 1.6rem;
+margin-top: 30px;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <h1>Morphological Analyser</h1>
+        <div class="glass-container">
+            <div class="glass">
+                
+                <h2>SANDHI VICHEDA</h2>
+                <form action="/sandhi_viched" method="post">
+                    <label for="user_input_sandhi">Enter Input:</label>
+                    <input type="text" class="input" id="sandhi_user_input" name="sandhi_user_input" value="{{ sandhi_user_input }}" required>
+                    
+                    <label for="in_enc">Input Encoding</label>
+                    <select name="in_enc" id="in_enc">
+                        <option value="WX" {% if sandhi_selected_encoding == 'WX' %}selected{% endif %}>WX</option>
+                        <option value="DN" {% if sandhi_selected_encoding == 'DN' %}selected{% endif %}>DN</option>
+                        <option value="RN" {% if sandhi_selected_encoding == 'RN' %}selected{% endif %}>RN</option>
+                        <option value="SL" {% if sandhi_selected_encoding == 'SL' %}selected{% endif %}>SL</option>
+                        <option value="KH" {% if sandhi_selected_encoding == 'KH' %}selected{% endif %}>KH</option>
+                        <option value="VH" {% if sandhi_selected_encoding == 'VH' %}selected{% endif %}>VH</option>
+                    </select>
+                
+                <label for="op_enc">Output Encoding</label>
+                <select name="op_enc" id="op_enc">
+                    <option value="deva" {% if sandhi_selected_output_encoding == 'deva' %}selected{% endif %}>DEVANAGARI</option>
+                    <option value="roma" {% if sandhi_selected_output_encoding == 'roma' %}selected{% endif %}>ROMAN</option>
+                </select>
+                
+                <label for="segmentation_mode">Segmentation Mode </label>
+                <select name="segmentation_mode" id="segmentation_mode">
+                    <option value="word" {% if sandhi_selected_segmentation_mode == 'word' %}selected{% endif %}>WORD</option>
+                    <option value="sent" {% if sandhi_selected_segmentation_mode == 'sent' %}selected{% endif %}>SENT</option>
+                </select>
+                
+                <label for="result_mode">Result Mode</label>
+                <select name="result_mode" id="result_mode">
+                    <option value="first" {% if sandhi_selected_result_mode == 'first' %}selected{% endif %}>FIRST</option>
+                    <option value="best" {% if sandhi_selected_result_mode == 'best' %}selected{% endif %}>BEST</option>
+                </select>
+
+                <button type="submit">Submit</button>
+            </form>
+
+            {% if sandhiViched %}
+                <p>{{ sandhiViched }}</p>
+            {% endif %}
+            </div>
+            <div class="glass">
+            <h2>PADA VICHEDA</h2>
+            <form action="/pada_vishleshika" method="post">
+                <label for="user_input_pada">Enter Input:</label>
+                <input type="text" class="input" id="pada_user_input" name="pada_user_input" value="{{ pada_user_input }}" required>
+
+                <label for="in_enc">Input Encoding</label>
+                <select name="in_enc" id="in_enc">
+                    <option value="WX" {% if pada_selected_encoding == 'WX' %}selected{% endif %}>WX</option>
+                    <option value="DN" {% if pada_selected_encoding == 'DN' %}selected{% endif %}>DN</option>
+                    <option value="RN" {% if pada_selected_encoding == 'RN' %}selected{% endif %}>RN</option>
+                    <option value="SL" {% if pada_selected_encoding == 'SL' %}selected{% endif %}>SL</option>
+                    <option value="KH" {% if pada_selected_encoding == 'KH' %}selected{% endif %}>KH</option>
+                    <option value="VH" {% if pada_selected_encoding == 'VH' %}selected{% endif %}>VH</option>
+                </select>
+                
+                <label for="op_enc">Output Encoding</label>
+                <select name="op_enc" id="op_enc">
+                    <option value="deva" {% if pada_selected_output_encoding == 'deva' %}selected{% endif %}>DEVANAGARI</option>
+                    <option value="roma" {% if pada_selected_output_encoding == 'roma' %}selected{% endif %}>ROMAN</option>
+                </select>
+                
+                <label for="result_mode">Result Mode</label>
+                <select name="result_mode" id="result_mode">
+                    <option value="first" {% if pada_selected_result_mode == 'first' %}selected{% endif %}>FIRST</option>
+                    <option value="best" {% if pada_selected_result_mode == 'best' %}selected{% endif %}>BEST</option>
+                </select>
+
+                <button type="submit">Submit</button>
+            </form>
+            {% if padaVishleshika %}
+                <p>{{ padaVishleshika }}</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+</body>
+</html>
